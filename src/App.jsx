@@ -7,10 +7,31 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       name: 'slm',
-      nickName: 'LeeeeeeM'
+      nickName: 'LeeeeeeM',
+      width: window.innerWidth
     }
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleNickNameChange = this.handleNickNameChange.bind(this)
+    this.handleSize = this.handleSize.bind(this)
+  }
+
+  componentDidMount() {
+    document.title = this.state.name + '   ' + this.state.nickName
+    window.addEventListener('resize', this.handleSize)
+  }
+
+  handleSize() {
+    this.setState({
+      width: window.innerWidth
+    })
+  }
+
+  componentDidUpdate() {
+    document.title = this.state.name + '    ' + this.state.nickName
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleSize)
   }
 
   handleNameChange(e) {
@@ -41,10 +62,13 @@ export default class App extends React.Component {
                 <LocalContext.Consumer>
                   {local => (
                     <Row label="Language">
-                      <div className={local.class}>{local.china}</div>
+                      <div>{local.china}</div>
                     </Row>
                   )}
                 </LocalContext.Consumer>
+                <Row label="Width">
+                  {this.state.width}
+                </Row>
               </section>
             )
           }

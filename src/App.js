@@ -4,10 +4,25 @@ import Row from './functions/Row'
 import { ThemeContext, LocalContext } from './Context'
 
 export default function App(props) {
-  const [name, setName] = useState('slm')
-  const [nickName, setNickName] = useState('LeeeeeeM')
+  const [ name, setName ] = useState('slm')
+  const [ nickName, setNickName ] = useState('LeeeeeeM')
+  const [ width, setWidth ] = useState(window.innerWidth)
   const theme = useContext(ThemeContext)
   const local = useContext(LocalContext)
+  useEffect(() => {
+    document.title = name + '   ' + nickName
+  })
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
+
+  function handleResize() {
+    setWidth(window.innerWidth)
+  }
 
   function handleNameChange(e) {
     setName(e.target.value)
@@ -32,7 +47,10 @@ export default function App(props) {
         />
       </Row>
       <Row label="Language">
-        <div className={local.class}>{local.us}</div>
+        <div>{local.us}</div>
+      </Row>
+      <Row label="Width">
+        <div>{width}</div>
       </Row>
     </section>
   )
