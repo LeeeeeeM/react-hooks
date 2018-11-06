@@ -4,47 +4,17 @@ import Row from './functions/Row'
 import { ThemeContext, LocalContext } from './Context'
 
 export default function App(props) {
-  const [ name, setName ] = useState('slm')
-  const [ nickName, setNickName ] = useState('LeeeeeeM')
-  const [ width, setWidth ] = useState(window.innerWidth)
+  const width = useWindowWidth()
   const theme = useContext(ThemeContext)
   const local = useContext(LocalContext)
-  useEffect(() => {
-    document.title = name + '   ' + nickName
-  })
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  })
-
-  function handleResize() {
-    setWidth(window.innerWidth)
-  }
-
-  function handleNameChange(e) {
-    setName(e.target.value)
-  }
-
-  function handleNickNameChange(e) {
-    setNickName(e.target.value)
-  }
-
+  const [ name, nickName ] = useNameChange('slm', 'LeeeeeeM')
   return (
     <section className={theme.class2}>
       <Row label="Name">
-        <input
-          value={name}
-          onChange={handleNameChange}
-        />
+        <input {...name}/>
       </Row>
       <Row label="nickName">
-        <input
-          value={nickName}
-          onChange={handleNickNameChange}
-        />
+        <input {...nickName}/>
       </Row>
       <Row label="Language">
         <div>{local.us}</div>
@@ -54,4 +24,41 @@ export default function App(props) {
       </Row>
     </section>
   )
+}
+
+
+function useWindowWidth () {
+  const [ width, setWidth ] = useState(window.innerWidth)
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
+  return width
+}
+
+function useNameChange(n, nn) {
+  const [ name, setName ] = useState(n)
+  const [ nickName, setNickName ] = useState(nn)
+  useEffect(() => {
+    document.title = name + '   ' + nickName
+  })
+
+  function handleNameChange(e) {
+    setName(e.target.value)
+  }
+
+  function handleNickNameChange(e) {
+    setNickName(e.target.value)
+  }
+
+  return [{
+    value: name,
+    onChange: handleNameChange
+  }, {
+    value: nickName,
+    onChange: handleNickNameChange
+  }]
 }
