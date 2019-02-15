@@ -1,6 +1,6 @@
 import React from 'react'
-import HOC, { eHOC } from './components/HOC'
-import Base from './components/Base'
+import HOC, { eHOC } from './HOC'
+import Base from './Base'
 
 export default HOC(Base)
 
